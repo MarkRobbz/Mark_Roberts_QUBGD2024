@@ -358,6 +358,7 @@ GameObject:
   - component: {fileID: 1230097945758985186}
   - component: {fileID: 6263464382252411801}
   - component: {fileID: 7051761138360572710}
+  - component: {fileID: 6659279044945655347}
   m_Layer: 5
   m_Name: FoodBar
   m_TagString: Untagged
@@ -445,6 +446,20 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &6659279044945655347
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1551074116383199239}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eb7af31f3fad77649ad5bc8215aaced7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  foodBar: {fileID: 1551074116383199239}
+  foodRequired: 1
 --- !u!1 &1807041632169581914
 GameObject:
   m_ObjectHideFlags: 0
@@ -714,7 +729,6 @@ GameObject:
   - component: {fileID: 8071845977212124858}
   - component: {fileID: 5384583256862074266}
   - component: {fileID: 6961204054762102764}
-  - component: {fileID: 4592675932810004771}
   m_Layer: 0
   m_Name: Animal_Fox_01
   m_TagString: Animal
@@ -829,20 +843,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c6216d52d13c6bd4da112e9c3202662d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &4592675932810004771
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4128474451075200132}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: eb7af31f3fad77649ad5bc8215aaced7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  foodBar: {fileID: 1551074116383199239}
-  foodRequired: 1
 --- !u!1 &4434005147673565540
 GameObject:
   m_ObjectHideFlags: 0

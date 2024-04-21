@@ -22,20 +22,38 @@ public class DetectCollisions : MonoBehaviour
         if (other.gameObject.CompareTag("Projectile") && gameObject.CompareTag("Animal"))
         {
             FoodBar foodBar = gameObject.GetComponentInChildren<FoodBar>();
-
-            if (foodBar != null && foodBar.GetCurrentFoodValue() < foodBar.foodRequired)
+            if (foodBar != null)
             {
+                
                 foodBar.Feed();
-                Destroy(other.gameObject); //Destroy projectile
+               
+                Destroy(other.gameObject); //destroys projectile
+
+                
+                if (foodBar.GetCurrentFoodValue() >= foodBar.foodRequired)
+                {
+                    // If food requirement is met, increase score
+                    player.GetComponent<PlayerController>().IncreaseScore();
+                    Debug.Log("Score: " + player.GetComponent<PlayerController>().GetScore());
+                    
+                    StartCoroutine(DestroyAnimalWithDelay()); //destroy after short time
+                }
             }
             else
             {
-                player.GetComponent<PlayerController>().IncreaseScore();
-                Debug.Log("Score: " + player.GetComponent<PlayerController>().GetScore());
-                Destroy(gameObject); //Destroy animal
-                Destroy(other.gameObject); //Destroy projectile
+                Debug.LogError("FoodBar component not found on the Animal GameObject or its children.");
             }
         } 
     }
+
+    IEnumerator DestroyAnimalWithDelay()
+    {
+        // wait 0.5 secs
+        yield return new WaitForSeconds(0.5f);
+        // Then destroy the animal
+        Destroy(gameObject);
+    }
+
+
 
 }
