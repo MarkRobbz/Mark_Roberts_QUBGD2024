@@ -17,13 +17,20 @@ public class DestroyOutOfBounds : MonoBehaviour
     void Update()
     {
         //If the object goes out of players view it will delete the object
-        if (transform.position.z > topBound)
+        if (gameObject.CompareTag("Projectile") == true && transform.position.z > topBound)
+        {
+            GameObject player = GameObject.FindGameObjectWithTag("Player");
+            player.gameObject.GetComponent<PlayerController>().DecreaseLives();
+            Destroy(gameObject);
+        }
+        else if (transform.position.z > topBound)
         {
             Destroy(gameObject);
         } else if (transform.position.z < lowerBound)
         {
-            Debug.Log("Game Over!");
             Destroy(gameObject);
         }
+        
+        
     }
 }
