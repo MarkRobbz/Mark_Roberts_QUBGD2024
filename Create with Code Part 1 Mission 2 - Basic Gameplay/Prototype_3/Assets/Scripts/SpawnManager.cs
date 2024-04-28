@@ -9,6 +9,7 @@ public class SpawnManager : MonoBehaviour
 
     private Vector3 _spawnPos = new Vector3(25, 0, 0);
     private GameObject _obstacleObjInstantiated;
+    private PlayerController _playerControllerScript;
 
     private float _startDelay = 2;
 
@@ -17,21 +18,23 @@ public class SpawnManager : MonoBehaviour
     void Start()
     {
         InvokeRepeating("SpawnObstacle", _startDelay, _repeatRate);
-        
+        _playerControllerScript = GameObject.Find("Player").GetComponent<PlayerController>();
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (obstacleObj.transform.position.x <= -10) //Needs fixen
-        {
-            Destroy(_obstacleObjInstantiated);
-        }
+        
     }
 
     void SpawnObstacle()
     {
-       _obstacleObjInstantiated = Instantiate(obstacleObj, _spawnPos, obstacleObj.transform.rotation);
+        if (_playerControllerScript.isGameOver == false)
+        {
+            _obstacleObjInstantiated = Instantiate(obstacleObj, _spawnPos, obstacleObj.transform.rotation);
+        }
+       
         
     }
 }
