@@ -1,118 +1,111 @@
-using System.Collections;
-using System.Collections.Generic;
+using System;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    [Header("Movement")]
- public float moveSpeed;
+    public float speed = 5.0f; // Speed of the player
+    public float mouseSensitivity = 100.0f; // Sensitivity of the mouse
+    public Transform playerCamera; // The camera attached to  player
+    public Rigidbody rb; // The Rigidbody attached to this object
+    private float xRotation = 0.0f; // Variable to store the vertical rotation of the camera
+    public float jumpForce = 5.0f; // Jump force added
+    private bool isGrounded; // Ground check flag added
+    
 
- public float groundDrag;
+    void Start()
+    {
+        InitialisePlayer();
+    }
 
- public float jumpForce;
- public float jumpCooldown;
- public float airMultiplier;
- bool readyToJump;
+    void Update()
+    {
+        HandleCameraMovement();
+        HandleJumpInput();
+    }
 
- [HideInInspector] public float walkSpeed;
- [HideInInspector] public float sprintSpeed;
+    void FixedUpdate()
+    {
+        MovePlayer();
+    }
+    
+    // Collision detection to check if the player is grounded
+    void OnCollisionEnter(Collision collision)
+    {
+        CheckIfGrounded(collision);
+    }
 
- [Header("Keybinds")]
- public KeyCode jumpKey = KeyCode.Space;
+    void OnCollisionExit(Collision collision)
+    {
+        isGrounded = false;
+    }
 
- [Header("Ground Check")]
- public float playerHeight;
- public LayerMask whatIsGround;
- bool grounded;
+    private void InitialisePlayer()
+    {
+        // Lock the cursor to the center of the screen
+        Cursor.lockState = CursorLockMode.Locked;
 
- public Transform orientation;
+        // Ensure there is a Rigidbody component attached
+        if (rb == null)
+            rb = GetComponent<Rigidbody>();
 
- float horizontalInput;
- float verticalInput;
+        // Ensure the player has a camera assigned
+        if (playerCamera == null)
+        {
+            Debug.LogError("PlayerController: No camera attached!");
+        }
+    }
 
- Vector3 moveDirection;
+    private void MovePlayer()
+    {
+        // Get input from keyboard
+        float moveHorizontal = Input.GetAxis("Horizontal");
+        float moveVertical = Input.GetAxis("Vertical");
 
- Rigidbody rb;
+        // Calculate movement direction relative to where the player is facing
+        Vector3 forwardMovement = transform.forward * moveVertical;
+        Vector3 sidewaysMovement = transform.right * moveHorizontal;
 
- private void Start()
- {
-     rb = GetComponent<Rigidbody>();
-     rb.freezeRotation = true;
+        // Apply movement to the Rigidbody
+        rb.MovePosition(rb.position + (forwardMovement + sidewaysMovement) * speed * Time.fixedDeltaTime);
+    }
 
-     readyToJump = true;
- }
+    private void HandleCameraMovement()
+    {
+        // Mouse input for camera rotation
+        float mouseX = Input.GetAxis("Mouse X") * mouseSensitivity * Time.deltaTime;
+        float mouseY = Input.GetAxis("Mouse Y") * mouseSensitivity * Time.deltaTime;
 
- private void Update()
- {
-     // ground check
-     grounded = Physics.Raycast(transform.position, Vector3.down, playerHeight * 0.5f + 0.3f, whatIsGround);
+        // Calculate camera rotation
+        xRotation -= mouseY;
+        xRotation = Mathf.Clamp(xRotation, -90f, 90f);
 
-     MyInput();
-     SpeedControl();
+        // Apply rotation to camera and player
+        playerCamera.localRotation = Quaternion.Euler(xRotation, 0f, 0f);
+        transform.Rotate(Vector3.up * mouseX);
 
-     // handle drag
-     if (grounded)
-         rb.drag = groundDrag;
-     else
-         rb.drag = 0;
- }
+    }
 
- private void FixedUpdate()
- {
-     MovePlayer();
- }
+    private void HandleJumpInput()
+    {
+        // Jump input check
+        if (Input.GetButtonDown("Jump") && isGrounded)
+        {
+            rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+        }
+    }
 
- private void MyInput()
- {
-     horizontalInput = Input.GetAxisRaw("Horizontal");
-     verticalInput = Input.GetAxisRaw("Vertical");
-
-     // when to jump
-     if(Input.GetKey(jumpKey) && readyToJump && grounded)
-     {
-         readyToJump = false;
-
-         Jump();
-
-         Invoke(nameof(ResetJump), jumpCooldown);
-     }
- }
-
- private void MovePlayer()
- {
-     // calculate movement direction
-     moveDirection = orientation.forward * verticalInput + orientation.right * horizontalInput;
-
-     // on ground
-     if(grounded)
-         rb.AddForce(moveDirection.normalized * moveSpeed * 10f, ForceMode.Force);
-
-     // in air
-     else if(!grounded)
-         rb.AddForce(moveDirection.normalized * moveSpeed * 10f * airMultiplier, ForceMode.Force);
- }
-
- private void SpeedControl()
- {
-     Vector3 flatVel = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
-
-     // limit velocity if needed
-     if(flatVel.magnitude > moveSpeed)
-     {
-         Vector3 limitedVel = flatVel.normalized * moveSpeed;
-         rb.velocity = new Vector3(limitedVel.x, rb.velocity.y, limitedVel.z);
-     }
- }
-
- private void Jump()
- {
-     // reset y velocity
-     rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
-
-     rb.AddForce(transform.up * jumpForce, ForceMode.Impulse);
- }
- private void ResetJump()
- {
-     readyToJump = true;
- }
+    private void CheckIfGrounded(Collision collision)
+    {
+        if (collision.contacts.Length > 0)
+        {
+            foreach (ContactPoint contact in collision.contacts)
+            {
+                if (Vector3.Dot(contact.normal, Vector3.up) > 0.5)
+                {
+                    isGrounded = true;
+                    break;
+                }
+            }
+        }
+    }
 }
