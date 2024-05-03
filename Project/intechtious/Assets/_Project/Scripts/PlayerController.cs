@@ -9,6 +9,10 @@ public class PlayerController : MonoBehaviour
     public Rigidbody rb; // The Rigidbody attached to this object
     private float xRotation = 0.0f; // Variable to store the vertical rotation of the camera
     public float jumpForce = 5.0f; // Jump force added
+    //public float extraGravityForce = 2.0f;
+    public float fallMultiplier = 2.5f; //increase rate of decent
+    public float lowJumpMultiplier = 2f; //control height of jump
+
     private bool isGrounded; // Ground check flag added
     
 
@@ -21,11 +25,16 @@ public class PlayerController : MonoBehaviour
     {
         HandleCameraMovement();
         HandleJumpInput();
+        ModifyJumpHeight();
     }
 
     void FixedUpdate()
     {
         MovePlayer();
+       // if (!isGrounded && rb.velocity.y < 0)
+      //  {
+      //      rb.AddForce(Vector3.down * extraGravityForce); // Apply extra downward force
+       // }
     }
     
     // Collision detection to check if the player is grounded
@@ -93,6 +102,19 @@ public class PlayerController : MonoBehaviour
             rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
         }
     }
+    
+    private void ModifyJumpHeight()
+    {
+        if (rb.velocity.y < 0)
+        {
+            rb.velocity += Vector3.up * Physics.gravity.y * (fallMultiplier - 1) * Time.deltaTime;
+        }
+        else if (rb.velocity.y > 0 && !Input.GetButton("Jump"))
+        {
+            rb.velocity += Vector3.up * Physics.gravity.y * (lowJumpMultiplier - 1) * Time.deltaTime;
+        }
+    }
+
 
     private void CheckIfGrounded(Collision collision)
     {

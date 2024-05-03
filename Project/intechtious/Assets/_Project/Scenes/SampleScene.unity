@@ -365,7 +365,6 @@ GameObject:
   - component: {fileID: 963194228}
   - component: {fileID: 963194227}
   - component: {fileID: 963194226}
-  - component: {fileID: 963194229}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -447,21 +446,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1344833014}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &963194229
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 963194225}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d1624fe7b0799764db4a1098da7b2c3a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _sensX: 400
-  _sensY: 400
-  orientation: {fileID: 786101190}
 --- !u!1 &971711200
 GameObject:
   m_ObjectHideFlags: 0
@@ -578,7 +562,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1064885497}
-  - component: {fileID: 1064885496}
   m_Layer: 0
   m_Name: CameraHolder
   m_TagString: Untagged
@@ -586,19 +569,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1064885496
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1064885495}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2895e4ba80901a740be7332849887875, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  cameraPosition: {fileID: 1436315079}
 --- !u!4 &1064885497
 Transform:
   m_ObjectHideFlags: 0
@@ -648,6 +618,9 @@ MonoBehaviour:
   mouseSensitivity: 400
   playerCamera: {fileID: 963194228}
   rb: {fileID: 1344833013}
+  jumpForce: 350
+  fallMultiplier: 5
+  lowJumpMultiplier: 2
 --- !u!54 &1344833013
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -656,7 +629,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1344833011}
   serializedVersion: 4
-  m_Mass: 1
+  m_Mass: 60
   m_Drag: 0
   m_AngularDrag: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
