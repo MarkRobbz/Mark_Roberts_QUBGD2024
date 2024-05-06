@@ -9,6 +9,7 @@ public class PlayerController : MonoBehaviour
     private GameObject _focalPoint;
     public int powerUpStrength = 4;
     public GameObject powerUpIndicator;
+    
 
     public float rollSpeed;
     
@@ -58,4 +59,6 @@ public class PlayerController : MonoBehaviour
             Debug.Log("Collided with: " + other.gameObject.name + " With power up set to " + hasPoowerUp);
         }
     }
+
+   
 }

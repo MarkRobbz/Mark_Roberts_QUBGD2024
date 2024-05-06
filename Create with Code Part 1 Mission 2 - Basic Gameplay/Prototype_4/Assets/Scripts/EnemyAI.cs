@@ -10,6 +10,8 @@ public class EnemyAI : MonoBehaviour
     private Rigidbody _enemyRB;
 
     private GameObject _player;
+
+    
     // Start is called before the first frame update
     void Start()
     {
@@ -22,5 +24,10 @@ public class EnemyAI : MonoBehaviour
     {
         Vector3 lookDirection = (_player.transform.position - transform.position).normalized;
         _enemyRB.AddForce( lookDirection * speed);
+
+        if (transform.position.y <= -10)
+        {
+            Destroy(gameObject);
+        }
     }
 }
