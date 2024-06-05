@@ -17,19 +17,19 @@ public class GameManager : MonoBehaviour
     private int score;
     public bool isGameActive;
     public Button restartBttn;
+    public GameObject titlescreen;
+    
     
 
-    void Start()
+    public void StartGame(int difficulty)
     {
+        spawnRate = spawnRate / difficulty;
         isGameActive = true;
         StartCoroutine(SpawnTarget());
         score = 0;
         updateScore(0);
-        
-
+        titlescreen.gameObject.SetActive(false);
     }
-
-   
 
 
     IEnumerator SpawnTarget()
